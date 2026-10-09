@@ -159,9 +159,7 @@ h3 {
 }
 
 .panel a:hover {
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 0.12em;
+  color: #fff;
 }
 
 .sections {
@@ -268,7 +266,9 @@ h3 {
 }
 
 section[id] {
-  padding-block: 2.5rem 0.5rem;
+  margin-top: 3.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--rule);
   /* Set by js/sections.js, which owns the reading band. */
   scroll-margin-top: var(--band-top, 0);
 }
@@ -276,7 +276,7 @@ section[id] {
 section[id] > h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .projects,
@@ -291,8 +291,10 @@ section[id] > h2 {
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: 1rem;
-  padding-block: 1rem;
-  border-top: 1px solid var(--rule);
+}
+
+.project + .project {
+  margin-top: 1.75rem;
 }
 
 .project-name {
