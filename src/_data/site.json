@@ -13,11 +13,6 @@
       "name": "LinkedIn",
       "url": "https://www.linkedin.com/in/dan-baggott",
       "icon": "linkedin"
-    },
-    {
-      "name": "Feed of sporadic writings",
-      "url": "/feed.xml",
-      "icon": "rss"
     }
   ]
 }
