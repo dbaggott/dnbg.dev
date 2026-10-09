@@ -101,15 +101,40 @@ h3 {
    the content. Side by side on a wide screen, where the panel stays put while
    the content scrolls; stacked on a narrow one. */
 
+/* The photo, under a veil dark enough for white text, sits behind the panel's
+   content and dissolves into the page at the edge it shares with the rest.
+   The dissolve is the photo's own transparency on an eased curve; a solid
+   page-coloured overlay instead shows bands where its gradient bends. */
 .panel {
-  /* The photo under a veil dark enough for white text, fading into the page
-     at the edge it shares with the content. */
+  position: relative;
+  isolation: isolate;
+  color: #fff;
+  --fade: to bottom;
+  --fade-length: 4rem;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background:
-    linear-gradient(to bottom, transparent calc(100% - 3rem), var(--page)),
     linear-gradient(var(--veil), var(--veil)),
     url(/images/tree-750.jpg) 50% 55% / cover no-repeat,
     #4b3d36;
-  color: #fff;
+  /* Smoothstep, sampled: opaque, easing out to transparent over --fade-length. */
+  mask-image: linear-gradient(
+    var(--fade),
+    #000 calc(100% - var(--fade-length)),
+    rgb(0 0 0 / 0.957) calc(100% - var(--fade-length) * 0.875),
+    rgb(0 0 0 / 0.844) calc(100% - var(--fade-length) * 0.75),
+    rgb(0 0 0 / 0.703) calc(100% - var(--fade-length) * 0.625),
+    rgb(0 0 0 / 0.5) calc(100% - var(--fade-length) * 0.5),
+    rgb(0 0 0 / 0.297) calc(100% - var(--fade-length) * 0.375),
+    rgb(0 0 0 / 0.156) calc(100% - var(--fade-length) * 0.25),
+    rgb(0 0 0 / 0.043) calc(100% - var(--fade-length) * 0.125),
+    transparent
+  );
 }
 
 .panel-inner {
@@ -195,14 +220,12 @@ h3 {
     position: sticky;
     top: 0;
     height: 100vh;
+    --fade: to right;
+    --fade-length: 14rem;
+  }
+
+  .panel::before {
     background:
-      linear-gradient(
-        to right,
-        transparent calc(100% - 12rem),
-        color-mix(in srgb, var(--page) 25%, transparent) calc(100% - 7rem),
-        color-mix(in srgb, var(--page) 75%, transparent) calc(100% - 2.5rem),
-        var(--page)
-      ),
       linear-gradient(var(--veil), var(--veil)),
       url(/images/tree-1200.jpg) 50% 50% / cover no-repeat,
       #4b3d36;
@@ -246,6 +269,8 @@ h3 {
 
 section[id] {
   padding-block: 2.5rem 0.5rem;
+  /* Set by js/sections.js, which owns the reading band. */
+  scroll-margin-top: var(--band-top, 0);
 }
 
 section[id] > h2 {

@@ -7,6 +7,13 @@
 const BAND_HEIGHT_REM = 12;
 const BAND_CENTRE = 0.4; // of the screen's height, from the top
 
+// A link to a section lands with the section's top at the top of the band,
+// so the section you chose is the one the band is in.
+document.documentElement.style.setProperty(
+  "--band-top",
+  `calc(${BAND_CENTRE * 100}vh - ${BAND_HEIGHT_REM / 2}rem)`,
+);
+
 const links = [...document.querySelectorAll(".sections a")];
 const sections = links.map((link) => document.querySelector(link.hash));
 
