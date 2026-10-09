@@ -116,16 +116,7 @@ h3 {
   padding: 3rem var(--gutter) 4.5rem;
 }
 
-.avatar {
-  display: block;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  border: 2px solid rgb(255 255 255 / 0.85);
-}
-
 .name {
-  margin-top: 1.25rem;
   font-size: clamp(2.25rem, 7vw, 3rem);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -233,9 +224,9 @@ h3 {
     margin-top: 0.5rem;
   }
 
-  /* --share is the part of the screen its section fills, from 0 to 1, set as
-     the page scrolls (js/sections.js). Where you are reads largest; between
-     two sections, both grow in proportion. */
+  /* --share, from 0 to 1, is how much of the reading band its section holds
+     (js/sections.js). Where you are reads largest; between two sections, both
+     grow in proportion. */
   .sections a {
     display: inline-block;
     font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
