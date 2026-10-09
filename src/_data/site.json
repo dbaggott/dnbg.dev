@@ -1,0 +1,9 @@
+{
+  "author": "Dan Baggott",
+  "tagline": "Software engineer. Empiricist. Simplifier.",
+  "url": "https://www.dnbg.dev/",
+  "links": [
+    { "name": "GitHub", "url": "https://github.com/dbaggott" },
+    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/dan-baggott" }
+  ]
+}

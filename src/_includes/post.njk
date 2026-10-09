@@ -1,0 +1,18 @@
+---
+layout: base.njk
+---
+<header class="masthead">
+  <a class="wordmark" href="/">{{ site.author }}</a>
+</header>
+<main class="page">
+  <article class="post">
+    <header class="post-header">
+      <p class="post-date"><time datetime="{{ page.date | isoDate }}">{{ page.date | longDate }}</time></p>
+      <h1 class="post-title">{{ title }}</h1>
+    </header>
+    <div class="prose">
+      {{ content | safe }}
+    </div>
+  </article>
+  <p class="back"><a href="/#writings">More sporadic writings</a></p>
+</main>

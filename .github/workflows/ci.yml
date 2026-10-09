@@ -1,0 +1,128 @@
+################################################################################
+# CI — build the site and check the build. Outside pull requests, publish it as
+# a release, tagged <sanitized-branch>_<sha>, to the operations release bucket.
+#
+# PUBLISHING IS NOT DEPLOYING. Nothing a visitor sees changes until
+# `apps/app deploy dnbg-dev <branch>` in dbaggott/infrastructure copies the
+# release into the site. AWS_ROLE_ARN, AWS_REGION and RELEASES_BUCKET are repo
+# variables set from there (accounts/github/dnbg_dev_ci.tf).
+#
+# Third-party actions are pinned to commit SHAs: this repo is public, and a
+# moved tag would run someone else's code with this workflow's permissions.
+################################################################################
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Publishes a branch's build, for `apps/app deploy dnbg-dev <branch>`.
+  # Dispatchable once this file is on the default branch; a dispatched run uses
+  # the chosen branch's copy, publish job included, so anyone who can push a
+  # branch decides what runs with the publish role.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push to a PR supersedes the run in flight for it. Every other run gets a
+# group of its own commit, since each publishes a distinct release.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .tool-versions
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Check the build
+        run: npm test
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: github.event_name != 'pull_request'
+        with:
+          name: site
+          path: dist
+          retention-days: 1
+
+  # The only job that can reach AWS. The publish role trusts the `publish`
+  # environment and nothing else in this repo, and this job must keep running
+  # only on push and workflow_dispatch, never on anything a fork can trigger.
+  publish:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: publish
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site
+          path: site
+
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Publish
+        env:
+          RELEASES_BUCKET: ${{ vars.RELEASES_BUCKET }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # The tag apps/app resolves a branch to, sanitized the same way.
+          TAG="$(printf '%s' "$BRANCH" | sed 's/[^a-zA-Z0-9._-]/_/g')_${SHA}"
+          DEST="s3://${RELEASES_BUCKET}/dnbg-dev/${TAG}"
+
+          # Nothing in the build is content-hashed, so every file revalidates.
+          aws s3 cp site "${DEST}" --recursive --only-show-errors \
+            --cache-control "no-cache"
+
+          # Last, because a deploy treats its presence as the release being
+          # complete, and the live site serving it as the deploy having landed.
+          jq -n --arg release "$TAG" --arg commit "$SHA" '{release: $release, commit: $commit}' > release.json
+          aws s3 cp release.json "${DEST}/release.json" --only-show-errors \
+            --content-type application/json --cache-control "no-cache"
+
+          echo "Published ${DEST}/"
+
+  # THE ONE CONTEXT BRANCH PROTECTION NAMES (accounts/github/main.tf in
+  # dbaggott/infrastructure), so a job starts gating a merge by being added to
+  # this `needs:` list. `if: always()` is what keeps a failed dependency from
+  # SKIPPING this job, which branch protection would read as success. A skipped
+  # dependency is accepted, which is how the publish job passes on a pull request.
+  ci-required:
+    if: always()
+    needs: [build, publish]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify every required job succeeded
+        env:
+          RESULTS: ${{ join(needs.*.result, ',') }}
+        run: |
+          set -euo pipefail
+          echo "needs.*.result = $RESULTS"
+          for r in ${RESULTS//,/ }; do
+            case "$r" in
+              success|skipped) ;;
+              *) echo "::error::dependency reported '$r'"; exit 1 ;;
+            esac
+          done

@@ -1,8 +1,4 @@
-_site
-.sass-cache
-.jekyll-metadata
+node_modules/
+dist/
+.worktrees/
 .DS_Store
-
-# IntelliJ
-*.iml
-.idea

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Landfall",
+    "kind": "Web app",
+    "about": "A map for listings posted at a location. Screen the candidates, see where they are, and plan the drive to the ones worth a visit.",
+    "url": "https://landfall.dnbg.app/"
+  },
+  {
+    "name": "Sweet Land Math",
+    "kind": "Game",
+    "about": "Grow a field of crops by practicing times tables, harvest them, and build a community with what you sell.",
+    "url": "https://learn.dnbg.app/times-tables/"
+  },
+  {
+    "name": "Oasis SMP",
+    "kind": "Minecraft server",
+    "about": "A hosted Paper server that Java and Bedrock players share, with its image, plugins and config in the open.",
+    "url": "https://github.com/dbaggott/mc-oasis"
+  },
+  {
+    "name": "claude-plugins",
+    "kind": "Claude Code plugins",
+    "about": "A workflow for agent sessions: every change through a worktree and a draft PR, issues written to survive a cold handoff, and an independent bot reviewing before a human merges.",
+    "url": "https://github.com/dbaggott/claude-plugins"
+  },
+  {
+    "name": "aws-use",
+    "kind": "Command-line tool",
+    "about": "Switch AWS SSO accounts and roles fast, across several SSO sessions at once, and set the profile in your current shell.",
+    "url": "https://github.com/dbaggott/aws-use"
+  },
+  {
+    "name": "git-tidy",
+    "kind": "Command-line tool",
+    "about": "A git subcommand that deletes branches whose work has already landed, removes their worktrees, fast-forwards the default branch and runs git gc.",
+    "url": "https://github.com/dbaggott/git-tidy"
+  }
+]
