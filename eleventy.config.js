@@ -13,6 +13,7 @@ export const config = {
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/images");
+  eleventyConfig.addPassthroughCopy("src/js");
   eleventyConfig.addPassthroughCopy("src/*.{ico,png}");
   eleventyConfig.addPassthroughCopy({
     "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2": "fonts/source-serif-4.woff2",

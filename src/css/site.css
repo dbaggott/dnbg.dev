@@ -14,14 +14,16 @@
   src: url(/fonts/source-serif-4-italic.woff2) format("woff2-variations");
 }
 
-/* The palette is the cover photo's: an overcast cove, and the one orange hat. */
+/* The palette is the tree photo's: a pale overcast sky, dark bark, and the
+   rust of the bark in light as the one accent. */
 :root {
-  --overcast: #eceeed;
-  --slate: #232b2e;
-  --tide: #55656a;
-  --shingle: #c3cbca;
-  --hat: #d94e1c;
-  --code-bg: #e1e5e4;
+  --page: #efeeeb;
+  --ink: #2a2321;
+  --muted: #6b625a;
+  --rule: #d6d0c8;
+  --accent: #a4532c;
+  --code-bg: #e5e2dd;
+  --veil: rgb(36 30 28 / 0.58);
 
   --text: "Source Serif 4", Georgia, "Times New Roman", serif;
 
@@ -33,12 +35,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --overcast: #1b2224;
-    --slate: #e3e8e7;
-    --tide: #9aabae;
-    --shingle: #34413f;
-    --hat: #ff7a45;
-    --code-bg: #242d30;
+    --page: #1e1a18;
+    --ink: #ece7e2;
+    --muted: #a89d93;
+    --rule: #3a332e;
+    --accent: #e3875a;
+    --code-bg: #2a2421;
 
     color-scheme: dark;
   }
@@ -57,8 +59,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--overcast);
-  color: var(--slate);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--text);
   font-size: 1.0625rem;
   line-height: 1.65;
@@ -73,7 +75,7 @@ img {
 a {
   color: inherit;
   text-decoration-line: underline;
-  text-decoration-color: var(--hat);
+  text-decoration-color: var(--accent);
   text-decoration-thickness: 0.09em;
   text-underline-offset: 0.2em;
 }
@@ -83,7 +85,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--hat);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -100,18 +102,18 @@ h3 {
    the content scrolls; stacked on a narrow one. */
 
 .panel {
-  /* A veil light enough to leave the photo a photo, dark enough for white
-     text. Each layout's crop keeps to the water and the rocks on the left,
-     away from the child on the right. */
+  /* The photo under a veil dark enough for white text, fading into the page
+     at the edge it shares with the content. */
   background:
-    linear-gradient(rgb(29 36 39 / 0.5), rgb(29 36 39 / 0.62)),
-    url(/images/cover-900.jpg) 0% 45% / 180% auto no-repeat,
-    #5d6668;
+    linear-gradient(to bottom, transparent calc(100% - 3rem), var(--page)),
+    linear-gradient(var(--veil), var(--veil)),
+    url(/images/tree-750.jpg) 50% 55% / cover no-repeat,
+    #4b3d36;
   color: #fff;
 }
 
 .panel-inner {
-  padding: 3rem var(--gutter) 2.5rem;
+  padding: 3rem var(--gutter) 4.5rem;
 }
 
 .avatar {
@@ -142,7 +144,7 @@ h3 {
 
 .panel a:hover {
   text-decoration: underline;
-  text-decoration-color: var(--hat);
+  text-decoration-color: var(--accent);
   text-decoration-thickness: 0.12em;
 }
 
@@ -202,10 +204,17 @@ h3 {
     position: sticky;
     top: 0;
     height: 100vh;
-    background-image:
-      linear-gradient(rgb(29 36 39 / 0.5), rgb(29 36 39 / 0.62)),
-      url(/images/cover-1600.jpg);
-    background-size: cover;
+    background:
+      linear-gradient(
+        to right,
+        transparent calc(100% - 12rem),
+        color-mix(in srgb, var(--page) 25%, transparent) calc(100% - 7rem),
+        color-mix(in srgb, var(--page) 75%, transparent) calc(100% - 2.5rem),
+        var(--page)
+      ),
+      linear-gradient(var(--veil), var(--veil)),
+      url(/images/tree-1200.jpg) 50% 50% / cover no-repeat,
+      #4b3d36;
   }
 
   .panel-inner {
@@ -221,12 +230,17 @@ h3 {
   }
 
   .sections li + li {
-    margin-top: 0.6rem;
+    margin-top: 0.5rem;
   }
 
+  /* --share is the part of the screen its section fills, from 0 to 1, set as
+     the page scrolls (js/sections.js). Where you are reads largest; between
+     two sections, both grow in proportion. */
   .sections a {
-    font-size: 1rem;
-    color: rgb(255 255 255 / 0.85);
+    display: inline-block;
+    font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
+    color: rgb(255 255 255 / calc(0.72 + var(--share, 0) * 0.28));
+    transition: font-size 0.12s ease-out;
   }
 
   .elsewhere {
@@ -262,7 +276,7 @@ section[id] > h2 {
   grid-template-columns: 1fr auto;
   column-gap: 1rem;
   padding-block: 1rem;
-  border-top: 1px solid var(--shingle);
+  border-top: 1px solid var(--rule);
 }
 
 .project-name {
@@ -273,7 +287,7 @@ section[id] > h2 {
 .project-kind {
   margin: 0;
   align-self: baseline;
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.875rem;
 }
 
@@ -290,7 +304,7 @@ section[id] > h2 {
 }
 
 .writings time {
-  color: var(--tide);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
   padding-top: 0.1em;
 }
@@ -314,7 +328,7 @@ section[id] > h2 {
 }
 
 .paper-citation {
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
@@ -325,13 +339,13 @@ section[id] > h2 {
 .colophon {
   margin-top: 3rem;
   padding-bottom: 3rem;
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.875rem;
 }
 
 .colophon p {
   margin: 0;
-  border-top: 1px solid var(--shingle);
+  border-top: 1px solid var(--rule);
   padding-top: 1.5rem;
 }
 
@@ -360,7 +374,7 @@ section[id] > h2 {
 
 .post-date {
   margin: 0 0 0.5rem;
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
@@ -387,7 +401,7 @@ section[id] > h2 {
 .prose img {
   display: block;
   margin: 1.5rem auto;
-  border: 1px solid var(--shingle);
+  border: 1px solid var(--rule);
 }
 
 .prose li + li {
@@ -397,8 +411,8 @@ section[id] > h2 {
 .prose blockquote {
   margin: 1.5rem 0;
   padding-left: 1.25rem;
-  border-left: 3px solid var(--hat);
-  color: var(--tide);
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
 }
 
 .prose :not(pre) > code {
@@ -425,11 +439,11 @@ pre {
 .footnotes-sep {
   margin: 3rem 0 1rem;
   border: 0;
-  border-top: 1px solid var(--shingle);
+  border-top: 1px solid var(--rule);
 }
 
 .footnotes {
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
@@ -449,37 +463,43 @@ pre {
 /* Prism tokens, in the same palette. */
 .token.comment,
 .token.prolog {
-  color: var(--tide);
+  color: var(--muted);
   font-style: italic;
 }
 
 .token.keyword,
 .token.boolean,
 .token.important {
-  color: var(--hat);
+  color: var(--accent);
 }
 
 .token.string,
 .token.char,
 .token.attr-value {
-  color: #2f6b5c;
+  color: #4c6a5c;
 }
 
 .token.number,
 .token.property {
-  color: #5a4c8f;
+  color: #3f6a70;
 }
 
 @media (prefers-color-scheme: dark) {
   .token.string,
   .token.char,
   .token.attr-value {
-    color: #8fcab8;
+    color: #9cc0ac;
   }
 
   .token.number,
   .token.property {
-    color: #b9aef0;
+    color: #8fbfc4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sections a {
+    transition: none;
   }
 }
 
