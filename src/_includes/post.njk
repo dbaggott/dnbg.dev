@@ -1,9 +1,7 @@
 ---
 layout: base.njk
 ---
-<header class="masthead">
-  <a class="wordmark" href="/">{{ site.author }}</a>
-</header>
+{% include "masthead.njk" %}
 <main class="page">
   <article class="post">
     <header class="post-header">
@@ -14,5 +12,5 @@ layout: base.njk
       {{ content | safe }}
     </div>
   </article>
-  <p class="back"><a href="/#writings">More sporadic writings</a></p>
+  <p class="back"><a href="/#writings">More {{ site.writingsTitle | lower }}</a></p>
 </main>

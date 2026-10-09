@@ -15,12 +15,27 @@ function files(dir) {
   );
 }
 
-const pages = files(dist)
-  .filter((file) => file.endsWith(".html"))
-  .map((file) => ({ name: relative(dist, file), html: readFileSync(file, "utf8") }));
+function read(extension) {
+  return files(dist)
+    .filter((file) => file.endsWith(extension))
+    .map((file) => ({ name: relative(dist, file), text: readFileSync(file, "utf8") }));
+}
 
+const pages = read(".html").map(({ name, text }) => ({ name, html: text }));
+const stylesheets = read(".css");
+
+// An attribute's values, however they are quoted.
 function attributes(html, attribute) {
-  return [...html.matchAll(new RegExp(`\\s${attribute}="([^"]*)"`, "g"))].map((m) => m[1]);
+  return [...html.matchAll(new RegExp(`\\s${attribute}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "gi"))]
+    .map((m) => m[1] ?? m[2] ?? m[3]);
+}
+
+function srcsetUrls(html) {
+  return attributes(html, "srcset").flatMap((set) => set.split(",").map((c) => c.trim().split(/\s+/)[0]));
+}
+
+function sameSite(url) {
+  return url.startsWith("/") && !url.startsWith("//");
 }
 
 // A path the host can serve: a file, or a directory with an index.html. The
@@ -40,13 +55,18 @@ test("every page loads resources from its own origin only", () => {
   for (const { name, html } of pages) {
     const loaded = [
       ...attributes(html, "src"),
-      ...attributes(html, "srcset").flatMap((set) => set.split(",").map((c) => c.trim().split(/\s+/)[0])),
+      ...srcsetUrls(html),
       ...[...html.matchAll(/<link\b[^>]*>/g)]
         .filter(([tag]) => !/rel="(canonical|alternate)"/.test(tag))
         .flatMap(([tag]) => attributes(tag, "href")),
     ];
     for (const url of loaded) {
-      assert.ok(url.startsWith("/") && !url.startsWith("//"), `${name} loads ${url} from another origin`);
+      assert.ok(sameSite(url), `${name} loads ${url} from another origin`);
+    }
+  }
+  for (const { name, text } of stylesheets) {
+    for (const [, url] of text.matchAll(/url\(\s*["']?([^"')]+)/g)) {
+      assert.ok(sameSite(url), `${name} loads ${url} from another origin`);
     }
   }
 });
@@ -55,17 +75,22 @@ test("no page has inline script or style", () => {
   for (const { name, html } of pages) {
     assert.doesNotMatch(html, /<script(?![^>]*\ssrc=)[^>]*>/, `${name} has an inline script`);
     assert.doesNotMatch(html, /<style\b/, `${name} has a style element`);
-    assert.doesNotMatch(html, /\sstyle="/, `${name} has a style attribute`);
+    assert.equal(attributes(html, "style").length, 0, `${name} has a style attribute`);
   }
 });
 
 test("every same-site link and resource resolves", () => {
   for (const { name, html } of pages) {
-    const urls = [...attributes(html, "href"), ...attributes(html, "src")]
-      .filter((url) => url.startsWith("/") && !url.startsWith("//"))
+    const urls = [...attributes(html, "href"), ...attributes(html, "src"), ...srcsetUrls(html)]
+      .filter(sameSite)
       .map((url) => url.split("#")[0]);
     for (const url of urls) {
       assert.ok(served(url), `${name} links to ${url}, which is not in the build`);
+    }
+  }
+  for (const { name, text } of stylesheets) {
+    for (const [, url] of text.matchAll(/url\(\s*["']?([^"')]+)/g)) {
+      assert.ok(served(url), `${name} loads ${url}, which is not in the build`);
     }
   }
 });

@@ -29,7 +29,7 @@ export default function (eleventyConfig) {
     outputPath: "/feed.xml",
     collection: { name: "writings" },
     metadata: {
-      title: `Sporadic Writings · ${site.author}`,
+      title: `${site.writingsTitle} · ${site.author}`,
       subtitle: site.tagline,
       language: "en",
       base: site.url,

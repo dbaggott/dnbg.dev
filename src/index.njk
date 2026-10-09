@@ -8,7 +8,7 @@ layout: base.njk
        sizes="100vw"
        width="1600" height="1071"
        alt="A small child in an orange hat stands on a pebble beach, pointing out across a still, grey cove.">
-  <h1 class="name">Dan Baggott</h1>
+  <h1 class="name">{{ site.author }}</h1>
 </header>
 
 <main class="page">
@@ -39,7 +39,7 @@ layout: base.njk
   </section>
 
   <section id="writings" aria-labelledby="writings-heading">
-    <h2 id="writings-heading">Sporadic Writings</h2>
+    <h2 id="writings-heading">{{ site.writingsTitle }}</h2>
     <ul class="writings">
       {%- for post in collections.writingsNewestFirst %}
       <li>

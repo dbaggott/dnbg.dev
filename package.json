@@ -6,7 +6,7 @@
   "description": "Dan Baggott's site, served at www.dnbg.dev",
   "scripts": {
     "dev": "eleventy --serve",
-    "build": "eleventy",
+    "build": "rm -rf dist && eleventy",
     "test": "node --test test/*.test.mjs"
   },
   "devDependencies": {
