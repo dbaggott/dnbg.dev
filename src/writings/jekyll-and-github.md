@@ -2,6 +2,8 @@
 title:  "Jekyll & GitHub == continuously deployed website in 10 minutes"
 date:   2016-08-16
 ---
+*This site has since moved off GitHub Pages: it's now built with Eleventy and served from AWS. The post is as I wrote it in 2016.*
+
 I very recently got around to building this website.  Now that it's up and I'm thinking back on the process, I'm finding myself surprised/pleased that the part that took me the longest was figuring out how I wanted to host the site.  I'm sufficiently thrilled with the simplicity and benefits of where I ended up that I wanted to share.
 
 For context, I should first say that my core requirements for a site are very modest.  Primarily, I want a site where I can share some professional information about myself and make the occasional blog post to share the ah-has! and general ups and downs of writing software.  Secondarily, I wanted to avoid paying anything more than a nominal service fee for hosting the site.  And, of course, I wanted to bring normal engineering standards to the process of maintaining the website.
