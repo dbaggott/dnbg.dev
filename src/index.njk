@@ -1,65 +1,67 @@
 ---
 layout: base.njk
 ---
-<header class="hero">
-  <img class="hero-photo"
-       src="/images/cover-1600.jpg"
-       srcset="/images/cover-900.jpg 900w, /images/cover-1600.jpg 1600w"
-       sizes="100vw"
-       width="1600" height="1071"
-       alt="A small child in an orange hat stands on a pebble beach, pointing out across a still, grey cove.">
-  <h1 class="name">{{ site.author }}</h1>
-</header>
-
-<main class="page">
-  <section class="intro" aria-label="About">
-    <img class="avatar" src="/images/profile-192.jpg" width="96" height="96" alt="">
-    <div>
+<div class="home">
+  <header class="panel">
+    <div class="panel-inner">
+      <img class="avatar" src="/images/profile-192.jpg" width="96" height="96" alt="">
+      <h1 class="name">{{ site.author }}</h1>
       <p class="tagline">{{ site.tagline }}</p>
-      <p>Things I’ve built, a few things I’ve written, and the papers from my years in biology research.</p>
-      <ul class="links">
+      <nav class="sections" aria-label="Sections">
+        <ul>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#writings">{{ site.writingsTitle }}</a></li>
+          <li><a href="#publications">Publications</a></li>
+        </ul>
+      </nav>
+      <ul class="elsewhere">
         {%- for link in site.links %}
-        <li><a href="{{ link.url }}">{{ link.name }}</a></li>
+        <li><a href="{{ link.url }}" aria-label="{{ link.name }}" title="{{ link.name }}">{% include "icons/" + link.icon + ".svg" %}</a></li>
         {%- endfor %}
       </ul>
     </div>
-  </section>
+  </header>
 
-  <section id="projects" aria-labelledby="projects-heading">
-    <h2 id="projects-heading">Projects</h2>
-    <ul class="projects">
-      {%- for project in projects %}
-      <li class="project">
-        <h3 class="project-name"><a href="{{ project.url }}">{{ project.name }}</a></h3>
-        <p class="project-kind">{{ project.kind }}</p>
-        <p class="project-about">{{ project.about }}</p>
-      </li>
-      {%- endfor %}
-    </ul>
-  </section>
+  <main class="content">
+    <p class="intro">Things I’ve built, a few things I’ve written, and the papers from my years in biology research.</p>
 
-  <section id="writings" aria-labelledby="writings-heading">
-    <h2 id="writings-heading">{{ site.writingsTitle }}</h2>
-    <ul class="writings">
-      {%- for post in collections.writingsNewestFirst %}
-      <li>
-        <time datetime="{{ post.date | isoDate }}">{{ post.date | year }}</time>
-        <a href="{{ post.url }}">{{ post.data.title }}</a>
-      </li>
-      {%- endfor %}
-    </ul>
-    <p class="feed"><a href="/feed.xml">Subscribe to the feed</a></p>
-  </section>
+    <section id="projects" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Projects</h2>
+      <ul class="projects">
+        {%- for project in projects %}
+        <li class="project">
+          <h3 class="project-name"><a href="{{ project.url }}">{{ project.name }}</a></h3>
+          <p class="project-kind">{{ project.kind }}</p>
+          <p class="project-about">{{ project.about }}</p>
+        </li>
+        {%- endfor %}
+      </ul>
+    </section>
 
-  <section id="publications" aria-labelledby="publications-heading">
-    <h2 id="publications-heading">Publications</h2>
-    <ul class="publications">
-      {%- for paper in publications %}
-      <li>
-        <p class="paper-title">{{ paper.title }}</p>
-        <p class="paper-citation">{{ paper.authors }}. {{ paper.year }}. <cite>{{ paper.source }}</cite>.</p>
-      </li>
-      {%- endfor %}
-    </ul>
-  </section>
-</main>
+    <section id="writings" aria-labelledby="writings-heading">
+      <h2 id="writings-heading">{{ site.writingsTitle }}</h2>
+      <ul class="writings">
+        {%- for post in collections.writingsNewestFirst %}
+        <li>
+          <time datetime="{{ post.date | isoDate }}">{{ post.date | year }}</time>
+          <a href="{{ post.url }}">{{ post.data.title }}</a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </section>
+
+    <section id="publications" aria-labelledby="publications-heading">
+      <h2 id="publications-heading">Publications</h2>
+      <ul class="publications">
+        {%- for paper in publications %}
+        <li>
+          <p class="paper-title">{{ paper.title }}</p>
+          <p class="paper-citation">{{ paper.authors }}. {{ paper.year }}. <cite>{{ paper.source }}</cite>.</p>
+        </li>
+        {%- endfor %}
+      </ul>
+    </section>
+
+    {% include "colophon.njk" %}
+  </main>
+</div>

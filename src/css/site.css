@@ -106,100 +106,149 @@ h3 {
   margin: 0;
 }
 
-/* Home: the photo, with the name set across its sky. */
+/* Home: a panel with the name and the way around, over the cove photo, beside
+   the content. Side by side on a wide screen, where the panel stays put while
+   the content scrolls; stacked on a narrow one. */
 
-/* The name sits on the cove's water, the lightest band of the photo. Each
-   layout crops the photo by a fixed proportion, so the water stays at the same
-   height in the box and the name can be placed by percentage. */
-.hero {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: #9aa3a3;
+.panel {
+  /* A veil light enough to leave the photo a photo, dark enough for white
+     text. Each layout's crop keeps to the water and the rocks on the left,
+     away from the child on the right. */
+  background:
+    linear-gradient(rgb(29 36 39 / 0.5), rgb(29 36 39 / 0.62)),
+    url(/images/cover-900.jpg) 0% 45% / 180% auto no-repeat,
+    #5d6668;
+  color: #fff;
 }
 
-.hero-photo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  /* Full height; the sides are cropped toward the child. */
-  object-position: 78% 50%;
-}
-
-.name {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  top: 27%;
-  color: #1d2427;
-  font-size: 13vw;
-  font-weight: 800;
-  font-stretch: 125%;
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-}
-
-@media (min-width: 44rem) {
-  .hero {
-    aspect-ratio: 2 / 1;
-  }
-
-  .hero-photo {
-    /* Full width; most of the sky is cropped away, keeping the beach. */
-    object-position: 50% 88%;
-  }
-
-  /* One line, clear of the rocks on the left and the trees' reflection on
-     the right. */
-  .name {
-    top: 29%;
-    left: 15%;
-    font-size: 8.5vw;
-  }
-}
-
-.page {
-  max-width: calc(var(--measure) + 2 * var(--gutter));
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-.intro {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.25rem;
-  align-items: start;
-  padding-block: 2.5rem 1rem;
+.panel-inner {
+  padding: 3rem var(--gutter) 2.5rem;
 }
 
 .avatar {
+  display: block;
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
-  margin-top: 0.35rem;
+  border: 2px solid rgb(255 255 255 / 0.85);
 }
 
-.intro p {
-  margin: 0 0 0.75rem;
+.name {
+  margin-top: 1.25rem;
+  font-size: clamp(2.25rem, 7vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .tagline {
-  font-family: var(--display);
-  font-size: 1.375rem;
-  font-weight: 650;
-  font-stretch: 112%;
-  line-height: 1.25;
+  margin: 0.5rem 0 0;
+  font-size: 1.125rem;
+  color: rgb(255 255 255 / 0.88);
 }
 
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
+.panel a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.panel a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--hat);
+  text-decoration-thickness: 0.12em;
+}
+
+.sections {
+  display: none;
+}
+
+.sections ul,
+.elsewhere {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.elsewhere {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.elsewhere a {
+  display: block;
+  padding: 0.25rem;
+  margin: -0.25rem;
+  opacity: 0.85;
+}
+
+.elsewhere a:hover {
+  opacity: 1;
+}
+
+.icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
+
+.content {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 0;
+}
+
+.intro {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 64rem) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(22rem, 38%) 1fr;
+  }
+
+  .panel {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background-image:
+      linear-gradient(rgb(29 36 39 / 0.5), rgb(29 36 39 / 0.62)),
+      url(/images/cover-1600.jpg);
+    background-size: cover;
+  }
+
+  .panel-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 5rem 3rem 3rem;
+  }
+
+  .sections {
+    display: block;
+    margin-top: 3rem;
+  }
+
+  .sections li + li {
+    margin-top: 0.6rem;
+  }
+
+  .sections a {
+    font-family: var(--display);
+    font-size: 1rem;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .elsewhere {
+    margin-top: auto;
+  }
+
+  .content {
+    margin: 0;
+    padding: 5rem 4rem 0;
+  }
 }
 
 section[id] {
@@ -207,11 +256,9 @@ section[id] {
 }
 
 section[id] > h2 {
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
-  font-weight: 800;
-  font-stretch: 125%;
-  letter-spacing: -0.01em;
-  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .projects,
@@ -231,9 +278,8 @@ section[id] > h2 {
 }
 
 .project-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  font-stretch: 112%;
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 
 .project-kind {
@@ -292,9 +338,8 @@ section[id] > h2 {
 }
 
 .colophon {
-  max-width: calc(var(--measure) + 2 * var(--gutter));
-  margin: 3rem auto 0;
-  padding: 1.5rem var(--gutter) 3rem;
+  margin-top: 3rem;
+  padding-bottom: 3rem;
   color: var(--tide);
   font-size: 0.875rem;
 }
@@ -307,6 +352,12 @@ section[id] > h2 {
 
 /* Posts and the 404 page. */
 
+.page {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
 .masthead {
   max-width: calc(var(--measure) + 2 * var(--gutter));
   margin: 0 auto;
@@ -315,8 +366,7 @@ section[id] > h2 {
 
 .wordmark {
   font-family: var(--display);
-  font-weight: 800;
-  font-stretch: 125%;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -332,17 +382,15 @@ section[id] > h2 {
 }
 
 .post-title {
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  font-weight: 800;
-  font-stretch: 118%;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.875rem, 5vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 .prose h2,
 .prose h3 {
   margin: 2.25rem 0 0.75rem;
-  font-stretch: 112%;
 }
 
 .prose h2 {
@@ -453,10 +501,6 @@ pre {
 }
 
 @media (max-width: 30rem) {
-  .intro {
-    grid-template-columns: 1fr;
-  }
-
   .project {
     grid-template-columns: 1fr;
   }
