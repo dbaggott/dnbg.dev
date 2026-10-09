@@ -1,26 +1,17 @@
 @font-face {
-  font-family: "Archivo";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
-  src: url(/fonts/archivo.woff2) format("woff2-variations");
-}
-
-@font-face {
-  font-family: "Literata";
+  font-family: "Source Serif 4";
   font-style: normal;
   font-display: swap;
   font-weight: 200 900;
-  src: url(/fonts/literata.woff2) format("woff2-variations");
+  src: url(/fonts/source-serif-4.woff2) format("woff2-variations");
 }
 
 @font-face {
-  font-family: "Literata";
+  font-family: "Source Serif 4";
   font-style: italic;
   font-display: swap;
   font-weight: 200 900;
-  src: url(/fonts/literata-italic.woff2) format("woff2-variations");
+  src: url(/fonts/source-serif-4-italic.woff2) format("woff2-variations");
 }
 
 /* The palette is the cover photo's: an overcast cove, and the one orange hat. */
@@ -32,8 +23,7 @@
   --hat: #d94e1c;
   --code-bg: #e1e5e4;
 
-  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --text: "Literata", Georgia, "Times New Roman", serif;
+  --text: "Source Serif 4", Georgia, "Times New Roman", serif;
 
   --measure: 40rem;
   --gutter: clamp(1.25rem, 5vw, 3rem);
@@ -101,7 +91,6 @@ a:hover {
 h1,
 h2,
 h3 {
-  font-family: var(--display);
   line-height: 1.1;
   margin: 0;
 }
@@ -236,7 +225,6 @@ h3 {
   }
 
   .sections a {
-    font-family: var(--display);
     font-size: 1rem;
     color: rgb(255 255 255 / 0.85);
   }
@@ -286,9 +274,7 @@ section[id] > h2 {
   margin: 0;
   align-self: baseline;
   color: var(--tide);
-  font-family: var(--display);
   font-size: 0.875rem;
-  font-stretch: 100%;
 }
 
 .project-about {
@@ -305,7 +291,6 @@ section[id] > h2 {
 
 .writings time {
   color: var(--tide);
-  font-family: var(--display);
   font-variant-numeric: tabular-nums;
   padding-top: 0.1em;
 }
@@ -365,7 +350,6 @@ section[id] > h2 {
 }
 
 .wordmark {
-  font-family: var(--display);
   font-weight: 600;
   text-decoration: none;
 }
@@ -377,7 +361,6 @@ section[id] > h2 {
 .post-date {
   margin: 0 0 0.5rem;
   color: var(--tide);
-  font-family: var(--display);
   font-size: 0.9375rem;
 }
 
