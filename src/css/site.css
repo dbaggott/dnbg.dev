@@ -1,0 +1,467 @@
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url(/fonts/archivo.woff2) format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/fonts/literata.woff2) format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Literata";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url(/fonts/literata-italic.woff2) format("woff2-variations");
+}
+
+/* The palette is the cover photo's: an overcast cove, and the one orange hat. */
+:root {
+  --overcast: #eceeed;
+  --slate: #232b2e;
+  --tide: #55656a;
+  --shingle: #c3cbca;
+  --hat: #d94e1c;
+  --code-bg: #e1e5e4;
+
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --text: "Literata", Georgia, "Times New Roman", serif;
+
+  --measure: 40rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --overcast: #1b2224;
+    --slate: #e3e8e7;
+    --tide: #9aabae;
+    --shingle: #34413f;
+    --hat: #ff7a45;
+    --code-bg: #242d30;
+
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--overcast);
+  color: var(--slate);
+  font-family: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-optical-sizing: auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--hat);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 0.2em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--hat);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* Home: the photo, with the name set across its sky. */
+
+/* The name sits on the cove's water, the lightest band of the photo. Each
+   layout crops the photo by a fixed proportion, so the water stays at the same
+   height in the box and the name can be placed by percentage. */
+.hero {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #9aa3a3;
+}
+
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  /* Full height; the sides are cropped toward the child. */
+  object-position: 78% 50%;
+}
+
+.name {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  top: 27%;
+  color: #1d2427;
+  font-size: 13vw;
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 44rem) {
+  .hero {
+    aspect-ratio: 2 / 1;
+  }
+
+  .hero-photo {
+    /* Full width; most of the sky is cropped away, keeping the beach. */
+    object-position: 50% 88%;
+  }
+
+  /* One line, clear of the rocks on the left and the trees' reflection on
+     the right. */
+  .name {
+    top: 29%;
+    left: 15%;
+    font-size: 8.5vw;
+  }
+}
+
+.page {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding-block: 2.5rem 1rem;
+}
+
+.avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  margin-top: 0.35rem;
+}
+
+.intro p {
+  margin: 0 0 0.75rem;
+}
+
+.tagline {
+  font-family: var(--display);
+  font-size: 1.375rem;
+  font-weight: 650;
+  font-stretch: 112%;
+  line-height: 1.25;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+section[id] {
+  padding-block: 2.5rem 0.5rem;
+}
+
+section[id] > h2 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 800;
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.25rem;
+}
+
+.projects,
+.writings,
+.publications {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--shingle);
+}
+
+.project-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-stretch: 112%;
+}
+
+.project-kind {
+  margin: 0;
+  align-self: baseline;
+  color: var(--tide);
+  font-family: var(--display);
+  font-size: 0.875rem;
+  font-stretch: 100%;
+}
+
+.project-about {
+  grid-column: 1 / -1;
+  margin: 0.35rem 0 0;
+}
+
+.writings li {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 1rem;
+  padding-block: 0.5rem;
+}
+
+.writings time {
+  color: var(--tide);
+  font-family: var(--display);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.1em;
+}
+
+.feed {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+}
+
+.publications li {
+  padding-block: 0.75rem;
+}
+
+.publications p {
+  margin: 0;
+}
+
+.paper-title {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.paper-citation {
+  color: var(--tide);
+  font-size: 0.9375rem;
+}
+
+.paper-citation cite {
+  font-style: italic;
+}
+
+.colophon {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 3rem auto 0;
+  padding: 1.5rem var(--gutter) 3rem;
+  color: var(--tide);
+  font-size: 0.875rem;
+}
+
+.colophon p {
+  margin: 0;
+  border-top: 1px solid var(--shingle);
+  padding-top: 1.5rem;
+}
+
+/* Posts and the 404 page. */
+
+.masthead {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 1.5rem var(--gutter) 0;
+}
+
+.wordmark {
+  font-family: var(--display);
+  font-weight: 800;
+  font-stretch: 125%;
+  text-decoration: none;
+}
+
+.post-header {
+  padding-block: 3rem 1.5rem;
+}
+
+.post-date {
+  margin: 0 0 0.5rem;
+  color: var(--tide);
+  font-family: var(--display);
+  font-size: 0.9375rem;
+}
+
+.post-title {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 800;
+  font-stretch: 118%;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.prose h2,
+.prose h3 {
+  margin: 2.25rem 0 0.75rem;
+  font-stretch: 112%;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+}
+
+.prose img {
+  display: block;
+  margin: 1.5rem auto;
+  border: 1px solid var(--shingle);
+}
+
+.prose li + li {
+  margin-top: 0.35rem;
+}
+
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--hat);
+  color: var(--tide);
+}
+
+.prose :not(pre) > code {
+  font-size: 0.875em;
+  background: var(--code-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  background: var(--code-bg);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+code,
+pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.footnotes-sep {
+  margin: 3rem 0 1rem;
+  border: 0;
+  border-top: 1px solid var(--shingle);
+}
+
+.footnotes {
+  color: var(--tide);
+  font-size: 0.9375rem;
+}
+
+.footnote-ref a,
+.footnote-backref {
+  text-decoration: none;
+}
+
+.back {
+  margin-top: 3rem;
+}
+
+.notice {
+  padding-block: 3rem;
+}
+
+/* Prism tokens, in the same palette. */
+.token.comment,
+.token.prolog {
+  color: var(--tide);
+  font-style: italic;
+}
+
+.token.keyword,
+.token.boolean,
+.token.important {
+  color: var(--hat);
+}
+
+.token.string,
+.token.char,
+.token.attr-value {
+  color: #2f6b5c;
+}
+
+.token.number,
+.token.property {
+  color: #5a4c8f;
+}
+
+@media (prefers-color-scheme: dark) {
+  .token.string,
+  .token.char,
+  .token.attr-value {
+    color: #8fcab8;
+  }
+
+  .token.number,
+  .token.property {
+    color: #b9aef0;
+  }
+}
+
+@media (max-width: 30rem) {
+  .intro {
+    grid-template-columns: 1fr;
+  }
+
+  .project {
+    grid-template-columns: 1fr;
+  }
+
+  .project-kind {
+    order: -1;
+  }
+}
