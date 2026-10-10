@@ -1,57 +1,41 @@
 @font-face {
-  font-family: "Archivo";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  font-stretch: 62% 125%;
-  src: url(/fonts/archivo.woff2) format("woff2-variations");
-}
-
-@font-face {
-  font-family: "Literata";
+  font-family: "Source Serif 4";
   font-style: normal;
   font-display: swap;
   font-weight: 200 900;
-  src: url(/fonts/literata.woff2) format("woff2-variations");
+  src: url(/fonts/source-serif-4.woff2) format("woff2-variations");
 }
 
 @font-face {
-  font-family: "Literata";
+  font-family: "Source Serif 4";
   font-style: italic;
   font-display: swap;
   font-weight: 200 900;
-  src: url(/fonts/literata-italic.woff2) format("woff2-variations");
+  src: url(/fonts/source-serif-4-italic.woff2) format("woff2-variations");
 }
 
-/* The palette is the cover photo's: an overcast cove, and the one orange hat. */
+/* One dark design: light text over a dimmed, blurred sky and treeline, with a
+   warm rust as the one accent. */
 :root {
-  --overcast: #eceeed;
-  --slate: #232b2e;
-  --tide: #55656a;
-  --shingle: #c3cbca;
-  --hat: #d94e1c;
-  --code-bg: #e1e5e4;
+  --page: #1e1a18;
+  --ink: #ece7e2;
+  --muted: #d0c7be;
+  --rule: rgb(236 231 226 / 0.18);
+  --accent: #e3875a;
+  --code-bg: rgb(20 17 16 / 0.62);
 
-  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --text: "Literata", Georgia, "Times New Roman", serif;
+  /* How much of the page colour lies over the photo: --wash-top over the sky
+     at the top of the screen, --wash-bottom over the treeline. Set so body
+     and muted text clear 4.5:1 against the brightest clouds behind them. */
+  --wash-top: 79%;
+  --wash-bottom: 68%;
+
+  --text: "Source Serif 4", Georgia, "Times New Roman", serif;
 
   --measure: 40rem;
   --gutter: clamp(1.25rem, 5vw, 3rem);
 
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --overcast: #1b2224;
-    --slate: #e3e8e7;
-    --tide: #9aabae;
-    --shingle: #34413f;
-    --hat: #ff7a45;
-    --code-bg: #242d30;
-
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
 
 *,
@@ -65,10 +49,36 @@ html {
   text-size-adjust: 100%;
 }
 
+/* The sky and treeline behind every page, fixed while the page scrolls. The
+   larger photo is for wide screens. */
+:root {
+  --sky: url(/images/sky-1280.jpg);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --sky: url(/images/sky-2400.jpg);
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--page) var(--wash-top), transparent),
+      color-mix(in srgb, var(--page) var(--wash-bottom), transparent)
+    ),
+    var(--sky) 50% 50% / cover no-repeat,
+    var(--page);
+}
+
 body {
   margin: 0;
-  background: var(--overcast);
-  color: var(--slate);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--text);
   font-size: 1.0625rem;
   line-height: 1.65;
@@ -83,7 +93,7 @@ img {
 a {
   color: inherit;
   text-decoration-line: underline;
-  text-decoration-color: var(--hat);
+  text-decoration-color: var(--accent);
   text-decoration-thickness: 0.09em;
   text-underline-offset: 0.2em;
 }
@@ -93,7 +103,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid var(--hat);
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -101,117 +111,147 @@ a:hover {
 h1,
 h2,
 h3 {
-  font-family: var(--display);
   line-height: 1.1;
   margin: 0;
 }
 
-/* Home: the photo, with the name set across its sky. */
+/* Home: a panel with the name and the way around, beside the content. Side
+   by side on a wide screen, where the panel stays put while the content
+   scrolls; stacked on a narrow one. */
 
-/* The name sits on the cove's water, the lightest band of the photo. Each
-   layout crops the photo by a fixed proportion, so the water stays at the same
-   height in the box and the name can be placed by percentage. */
-.hero {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: #9aa3a3;
+.panel {
+  color: var(--ink);
 }
 
-.hero-photo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  /* Full height; the sides are cropped toward the child. */
-  object-position: 78% 50%;
+.panel-inner {
+  padding: 3rem var(--gutter) 0;
 }
 
 .name {
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  top: 27%;
-  color: #1d2427;
-  font-size: 13vw;
-  font-weight: 800;
-  font-stretch: 125%;
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-}
-
-@media (min-width: 44rem) {
-  .hero {
-    aspect-ratio: 2 / 1;
-  }
-
-  .hero-photo {
-    /* Full width; most of the sky is cropped away, keeping the beach. */
-    object-position: 50% 88%;
-  }
-
-  /* One line, clear of the rocks on the left and the trees' reflection on
-     the right. */
-  .name {
-    top: 29%;
-    left: 15%;
-    font-size: 8.5vw;
-  }
-}
-
-.page {
-  max-width: calc(var(--measure) + 2 * var(--gutter));
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-.intro {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.25rem;
-  align-items: start;
-  padding-block: 2.5rem 1rem;
-}
-
-.avatar {
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  margin-top: 0.35rem;
-}
-
-.intro p {
-  margin: 0 0 0.75rem;
+  font-size: clamp(2.25rem, 7vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .tagline {
-  font-family: var(--display);
-  font-size: 1.375rem;
-  font-weight: 650;
-  font-stretch: 112%;
-  line-height: 1.25;
+  margin: 0.5rem 0 0;
+  font-size: 1.125rem;
+  color: var(--muted);
 }
 
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
+.panel a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.panel a:hover {
+  color: var(--ink);
+}
+
+.sections {
+  display: none;
+}
+
+.sections ul,
+.elsewhere {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.elsewhere {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.elsewhere a {
+  display: block;
+  padding: 0.25rem;
+  margin: -0.25rem;
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
+
+.content {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 0;
+}
+
+.intro {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 64rem) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(22rem, 38%) 1fr;
+  }
+
+  .panel {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .panel-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 5rem 3rem 3rem;
+  }
+
+  .sections {
+    display: block;
+    margin-top: 3rem;
+  }
+
+  .sections li + li {
+    margin-top: 0.5rem;
+  }
+
+  /* --share, from 0 to 1, is how much of the reading band its section holds
+     (js/sections.js). Where you are reads largest; between two sections, both
+     grow in proportion. */
+  .sections a {
+    display: inline-block;
+    font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
+    color: color-mix(in srgb, var(--ink) calc(80% + var(--share, 0) * 20%), transparent);
+    transition: font-size 0.12s ease-out;
+  }
+
+
+  .content {
+    max-width: calc(var(--measure) + 8rem);
+    margin: 0;
+    padding: 5rem 4rem 0;
+  }
+
+  /* Set by js/sections.js, which owns the reading band. */
+  section[id] {
+    scroll-margin-top: var(--band-top, 0);
+  }
+}
+
 section[id] {
-  padding-block: 2.5rem 0.5rem;
+  margin-top: 3.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--rule);
 }
 
 section[id] > h2 {
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
-  font-weight: 800;
-  font-stretch: 125%;
-  letter-spacing: -0.01em;
-  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
 
 .projects,
@@ -226,23 +266,22 @@ section[id] > h2 {
   display: grid;
   grid-template-columns: 1fr auto;
   column-gap: 1rem;
-  padding-block: 1rem;
-  border-top: 1px solid var(--shingle);
+}
+
+.project + .project {
+  margin-top: 1.75rem;
 }
 
 .project-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  font-stretch: 112%;
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 
 .project-kind {
   margin: 0;
   align-self: baseline;
-  color: var(--tide);
-  font-family: var(--display);
+  color: var(--muted);
   font-size: 0.875rem;
-  font-stretch: 100%;
 }
 
 .project-about {
@@ -258,15 +297,9 @@ section[id] > h2 {
 }
 
 .writings time {
-  color: var(--tide);
-  font-family: var(--display);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
   padding-top: 0.1em;
-}
-
-.feed {
-  margin-top: 1rem;
-  font-size: 0.9375rem;
 }
 
 .publications li {
@@ -283,7 +316,7 @@ section[id] > h2 {
 }
 
 .paper-citation {
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
@@ -291,21 +324,34 @@ section[id] > h2 {
   font-style: italic;
 }
 
+/* Outside the main content, so it is the page's footer for assistive tech; on
+   posts it sits under the page column. */
 .colophon {
-  max-width: calc(var(--measure) + 2 * var(--gutter));
-  margin: 3rem auto 0;
-  padding: 1.5rem var(--gutter) 3rem;
-  color: var(--tide);
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+  color: var(--muted);
   font-size: 0.875rem;
 }
 
 .colophon p {
   margin: 0;
-  border-top: 1px solid var(--shingle);
+  border-top: 1px solid var(--rule);
   padding-top: 1.5rem;
 }
 
 /* Posts and the 404 page. */
+
+body > .colophon {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.page {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
 
 .masthead {
   max-width: calc(var(--measure) + 2 * var(--gutter));
@@ -314,9 +360,7 @@ section[id] > h2 {
 }
 
 .wordmark {
-  font-family: var(--display);
-  font-weight: 800;
-  font-stretch: 125%;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -326,23 +370,20 @@ section[id] > h2 {
 
 .post-date {
   margin: 0 0 0.5rem;
-  color: var(--tide);
-  font-family: var(--display);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
 .post-title {
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  font-weight: 800;
-  font-stretch: 118%;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.875rem, 5vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
 .prose h2,
 .prose h3 {
   margin: 2.25rem 0 0.75rem;
-  font-stretch: 112%;
 }
 
 .prose h2 {
@@ -356,7 +397,7 @@ section[id] > h2 {
 .prose img {
   display: block;
   margin: 1.5rem auto;
-  border: 1px solid var(--shingle);
+  border: 1px solid var(--rule);
 }
 
 .prose li + li {
@@ -366,8 +407,8 @@ section[id] > h2 {
 .prose blockquote {
   margin: 1.5rem 0;
   padding-left: 1.25rem;
-  border-left: 3px solid var(--hat);
-  color: var(--tide);
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
 }
 
 .prose :not(pre) > code {
@@ -394,11 +435,11 @@ pre {
 .footnotes-sep {
   margin: 3rem 0 1rem;
   border: 0;
-  border-top: 1px solid var(--shingle);
+  border-top: 1px solid var(--rule);
 }
 
 .footnotes {
-  color: var(--tide);
+  color: var(--muted);
   font-size: 0.9375rem;
 }
 
@@ -418,45 +459,35 @@ pre {
 /* Prism tokens, in the same palette. */
 .token.comment,
 .token.prolog {
-  color: var(--tide);
+  color: var(--muted);
   font-style: italic;
 }
 
 .token.keyword,
 .token.boolean,
 .token.important {
-  color: var(--hat);
+  color: var(--accent);
 }
 
 .token.string,
 .token.char,
 .token.attr-value {
-  color: #2f6b5c;
+  color: #9cc0ac;
 }
 
 .token.number,
 .token.property {
-  color: #5a4c8f;
+  color: #8fbfc4;
 }
 
-@media (prefers-color-scheme: dark) {
-  .token.string,
-  .token.char,
-  .token.attr-value {
-    color: #8fcab8;
-  }
 
-  .token.number,
-  .token.property {
-    color: #b9aef0;
+@media (prefers-reduced-motion: reduce) {
+  .sections a {
+    transition: none;
   }
 }
 
 @media (max-width: 30rem) {
-  .intro {
-    grid-template-columns: 1fr;
-  }
-
   .project {
     grid-template-columns: 1fr;
   }

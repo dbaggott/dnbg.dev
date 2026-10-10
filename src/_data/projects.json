@@ -14,8 +14,8 @@
   {
     "name": "Oasis SMP",
     "kind": "Minecraft server",
-    "about": "A hosted Paper server that Java and Bedrock players share, with its image, plugins and config in the open.",
-    "url": "https://github.com/dbaggott/mc-oasis"
+    "about": "A hosted Minecraft server that Java and Bedrock players share.",
+    "url": "https://www.oasis-smp.com/"
   },
   {
     "name": "claude-plugins",

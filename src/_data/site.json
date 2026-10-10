@@ -6,11 +6,13 @@
   "links": [
     {
       "name": "GitHub",
-      "url": "https://github.com/dbaggott"
+      "url": "https://github.com/dbaggott",
+      "icon": "github"
     },
     {
       "name": "LinkedIn",
-      "url": "https://www.linkedin.com/in/dan-baggott"
+      "url": "https://www.linkedin.com/in/dan-baggott",
+      "icon": "linkedin"
     }
   ]
 }

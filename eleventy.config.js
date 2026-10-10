@@ -13,11 +13,11 @@ export const config = {
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/images");
+  eleventyConfig.addPassthroughCopy("src/js");
   eleventyConfig.addPassthroughCopy("src/*.{ico,png}");
   eleventyConfig.addPassthroughCopy({
-    "node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2": "fonts/archivo.woff2",
-    "node_modules/@fontsource-variable/literata/files/literata-latin-opsz-normal.woff2": "fonts/literata.woff2",
-    "node_modules/@fontsource-variable/literata/files/literata-latin-opsz-italic.woff2": "fonts/literata-italic.woff2",
+    "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2": "fonts/source-serif-4.woff2",
+    "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-italic.woff2": "fonts/source-serif-4-italic.woff2",
   });
 
   eleventyConfig.addGlobalData("buildYear", new Date().getUTCFullYear());
