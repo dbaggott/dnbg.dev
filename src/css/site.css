@@ -49,7 +49,18 @@ html {
   text-size-adjust: 100%;
 }
 
-/* The sky and treeline behind every page, fixed while the page scrolls. */
+/* The sky and treeline behind every page, fixed while the page scrolls. The
+   larger photo is for wide screens. */
+:root {
+  --sky: url(/images/sky-1280.jpg);
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --sky: url(/images/sky-2400.jpg);
+  }
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -60,19 +71,8 @@ body::before {
       color-mix(in srgb, var(--page) var(--wash-top), transparent),
       color-mix(in srgb, var(--page) var(--wash-bottom), transparent)
     ),
-    url(/images/sky-1280.jpg) 50% 50% / cover no-repeat,
+    var(--sky) 50% 50% / cover no-repeat,
     var(--page);
-}
-
-@media (min-width: 64rem) {
-  body::before {
-    background-image:
-      linear-gradient(
-        color-mix(in srgb, var(--page) var(--wash-top), transparent),
-        color-mix(in srgb, var(--page) var(--wash-bottom), transparent)
-      ),
-      url(/images/sky-2400.jpg);
-  }
 }
 
 body {
@@ -170,10 +170,6 @@ h3 {
   padding: 0.25rem;
   margin: -0.25rem;
   color: color-mix(in srgb, var(--ink) 80%, transparent);
-}
-
-.elsewhere a:hover {
-  color: var(--ink);
 }
 
 .icon {
