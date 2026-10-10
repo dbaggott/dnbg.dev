@@ -115,8 +115,9 @@ h3 {
   margin: 0;
 }
 
-/* Home: a panel with the name and the way around, beside the content. Side by side on a wide screen, where the panel stays put while
-   the content scrolls; stacked on a narrow one. */
+/* Home: a panel with the name and the way around, beside the content. Side
+   by side on a wide screen, where the panel stays put while the content
+   scrolls; stacked on a narrow one. */
 
 .panel {
   color: var(--ink);
