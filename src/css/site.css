@@ -57,7 +57,7 @@ html {
   text-size-adjust: 100%;
 }
 
-/* The woods behind every page, washed out toward the page colour so text
+/* The sky and treeline behind every page, washed out toward the page colour so text
    reads over it; in dark mode, washed toward the dark page instead. */
 body::before {
   content: "";
@@ -69,7 +69,7 @@ body::before {
       color-mix(in srgb, var(--page) var(--wash), transparent),
       color-mix(in srgb, var(--page) var(--wash), transparent)
     ),
-    url(/images/woods-1280.jpg) 50% 40% / cover no-repeat,
+    url(/images/sky-1280.jpg) 50% 50% / cover no-repeat,
     var(--page);
 }
 
@@ -80,7 +80,7 @@ body::before {
         color-mix(in srgb, var(--page) var(--wash), transparent),
         color-mix(in srgb, var(--page) var(--wash), transparent)
       ),
-      url(/images/woods-2400.jpg);
+      url(/images/sky-2400.jpg);
   }
 }
 
