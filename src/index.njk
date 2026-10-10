@@ -6,6 +6,11 @@ layout: base.njk
     <div class="panel-inner">
       <h1 class="name">{{ site.author }}</h1>
       <p class="tagline">{{ site.tagline }}</p>
+      <ul class="elsewhere">
+        {%- for link in site.links %}
+        <li><a href="{{ link.url }}" aria-label="{{ link.name }}" title="{{ link.name }}">{% include "icons/" + link.icon + ".svg" %}</a></li>
+        {%- endfor %}
+      </ul>
       <nav class="sections" aria-label="Sections">
         <ul>
           <li><a href="#projects">Projects</a></li>
@@ -13,11 +18,6 @@ layout: base.njk
           <li><a href="#publications">Publications</a></li>
         </ul>
       </nav>
-      <ul class="elsewhere">
-        {%- for link in site.links %}
-        <li><a href="{{ link.url }}" aria-label="{{ link.name }}" title="{{ link.name }}">{% include "icons/" + link.icon + ".svg" %}</a></li>
-        {%- endfor %}
-      </ul>
     </div>
   </header>
 

@@ -175,14 +175,18 @@ h3 {
 .elsewhere {
   display: flex;
   gap: 1.25rem;
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
 }
 
 .elsewhere a {
   display: block;
   padding: 0.25rem;
   margin: -0.25rem;
-  color: var(--muted);
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+.elsewhere a:hover {
+  color: var(--ink);
 }
 
 .icon {
@@ -239,16 +243,6 @@ h3 {
     font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
     color: color-mix(in srgb, var(--ink) calc(80% + var(--share, 0) * 20%), transparent);
     transition: font-size 0.12s ease-out;
-  }
-
-  /* Over the treeline, which fills the bottom of the background. */
-  .elsewhere {
-    margin-top: auto;
-  }
-
-  .elsewhere a,
-  .elsewhere a:hover {
-    color: #f4f3f0;
   }
 
   .tagline {
