@@ -74,6 +74,10 @@ body::before {
 }
 
 @media (min-width: 64rem) {
+  :root {
+    --wash: 35%;
+  }
+
   body::before {
     background-image:
       linear-gradient(
@@ -233,17 +237,31 @@ h3 {
   .sections a {
     display: inline-block;
     font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
-    color: color-mix(in srgb, var(--ink) calc(68% + var(--share, 0) * 32%), transparent);
+    color: color-mix(in srgb, var(--ink) calc(80% + var(--share, 0) * 20%), transparent);
     transition: font-size 0.12s ease-out;
   }
 
+  /* Over the treeline, which fills the bottom of the background. */
   .elsewhere {
     margin-top: auto;
   }
 
+  .elsewhere a,
+  .elsewhere a:hover {
+    color: #f4f3f0;
+  }
+
+  .tagline {
+    color: color-mix(in srgb, var(--ink) 85%, transparent);
+  }
+
+  /* The text gets a solid column of page colour, so the photo can show at
+     full strength on either side of it. */
   .content {
     margin: 0;
     padding: 5rem 4rem 0;
+    min-height: 100vh;
+    background: var(--page);
   }
 }
 
@@ -366,6 +384,21 @@ section[id] > h2 {
 .wordmark {
   font-weight: 600;
   text-decoration: none;
+}
+
+/* On a wide screen, posts get the same solid column as the home page's text,
+   with the photo either side of it. */
+@media (min-width: 64rem) {
+  .masthead,
+  .page {
+    max-width: calc(var(--measure) + 8rem);
+    padding-inline: 4rem;
+    background: var(--page);
+  }
+
+  .page {
+    min-height: 100vh;
+  }
 }
 
 .post-header {
