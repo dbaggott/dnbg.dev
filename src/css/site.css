@@ -14,36 +14,28 @@
   src: url(/fonts/source-serif-4-italic.woff2) format("woff2-variations");
 }
 
-/* The palette is the tree photo's: a pale overcast sky, dark bark, and the
-   rust of the bark in light as the one accent. */
+/* One dark design: light text over a dimmed, blurred sky and treeline. The
+   rust of bark in light is the one accent. */
 :root {
-  --page: #efeeeb;
-  --ink: #2a2321;
-  --muted: #6b625a;
-  --rule: rgb(42 35 33 / 0.16);
-  --accent: #a4532c;
-  --code-bg: #e5e2dd;
-  --wash: 85%;
+  --page: #1e1a18;
+  --ink: #ece7e2;
+  --muted: #d0c7be;
+  --rule: rgb(236 231 226 / 0.18);
+  --accent: #e3875a;
+  --code-bg: rgb(20 17 16 / 0.62);
+
+  /* How much of the page colour lies over the photo: --wash-top over the sky
+     at the top of the screen, --wash-bottom over the treeline. Set so text
+     clears 4.5:1 against the brightest clouds behind it. */
+  --wash-top: 79%;
+  --wash-bottom: 68%;
 
   --text: "Source Serif 4", Georgia, "Times New Roman", serif;
 
   --measure: 40rem;
   --gutter: clamp(1.25rem, 5vw, 3rem);
 
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page: #1e1a18;
-    --ink: #ece7e2;
-    --muted: #a89d93;
-    --rule: rgb(236 231 226 / 0.16);
-    --accent: #e3875a;
-    --code-bg: #2a2421;
-
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
 
 *,
@@ -57,8 +49,7 @@ html {
   text-size-adjust: 100%;
 }
 
-/* The sky and treeline behind every page, washed out toward the page colour so text
-   reads over it; in dark mode, washed toward the dark page instead. */
+/* The sky and treeline behind every page, fixed while the page scrolls. */
 body::before {
   content: "";
   position: fixed;
@@ -66,23 +57,19 @@ body::before {
   z-index: -1;
   background:
     linear-gradient(
-      color-mix(in srgb, var(--page) var(--wash), transparent),
-      color-mix(in srgb, var(--page) var(--wash), transparent)
+      color-mix(in srgb, var(--page) var(--wash-top), transparent),
+      color-mix(in srgb, var(--page) var(--wash-bottom), transparent)
     ),
     url(/images/sky-1280.jpg) 50% 50% / cover no-repeat,
     var(--page);
 }
 
 @media (min-width: 64rem) {
-  :root {
-    --wash: 35%;
-  }
-
   body::before {
     background-image:
       linear-gradient(
-        color-mix(in srgb, var(--page) var(--wash), transparent),
-        color-mix(in srgb, var(--page) var(--wash), transparent)
+        color-mix(in srgb, var(--page) var(--wash-top), transparent),
+        color-mix(in srgb, var(--page) var(--wash-bottom), transparent)
       ),
       url(/images/sky-2400.jpg);
   }
@@ -137,7 +124,7 @@ h3 {
 }
 
 .panel-inner {
-  padding: 3rem var(--gutter) 4.5rem;
+  padding: 3rem var(--gutter) 0;
 }
 
 .name {
@@ -245,17 +232,10 @@ h3 {
     transition: font-size 0.12s ease-out;
   }
 
-  .tagline {
-    color: color-mix(in srgb, var(--ink) 85%, transparent);
-  }
 
-  /* The text gets a solid column of page colour, so the photo can show at
-     full strength on either side of it. */
   .content {
     margin: 0;
     padding: 5rem 4rem 0;
-    min-height: 100vh;
-    background: var(--page);
   }
 }
 
@@ -380,21 +360,6 @@ section[id] > h2 {
   text-decoration: none;
 }
 
-/* On a wide screen, posts get the same solid column as the home page's text,
-   with the photo either side of it. */
-@media (min-width: 64rem) {
-  .masthead,
-  .page {
-    max-width: calc(var(--measure) + 8rem);
-    padding-inline: 4rem;
-    background: var(--page);
-  }
-
-  .page {
-    min-height: 100vh;
-  }
-}
-
 .post-header {
   padding-block: 3rem 1.5rem;
 }
@@ -503,26 +468,14 @@ pre {
 .token.string,
 .token.char,
 .token.attr-value {
-  color: #4c6a5c;
+  color: #9cc0ac;
 }
 
 .token.number,
 .token.property {
-  color: #3f6a70;
+  color: #8fbfc4;
 }
 
-@media (prefers-color-scheme: dark) {
-  .token.string,
-  .token.char,
-  .token.attr-value {
-    color: #9cc0ac;
-  }
-
-  .token.number,
-  .token.property {
-    color: #8fbfc4;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .sections a {
