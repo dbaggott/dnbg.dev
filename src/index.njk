@@ -21,47 +21,49 @@ layout: base.njk
     </div>
   </header>
 
-  <main class="content">
-    <p class="intro">Things I’ve built, a few things I’ve written, and the papers from my years in biology research.</p>
+  <div class="content">
+    <main>
+      <p class="intro">Things I’ve built, a few things I’ve written, and the papers from my years in biology research.</p>
 
-    <section id="projects" aria-labelledby="projects-heading">
-      <h2 id="projects-heading">Projects</h2>
-      <ul class="projects">
-        {%- for project in projects %}
-        <li class="project">
-          <h3 class="project-name"><a href="{{ project.url }}">{{ project.name }}</a></h3>
-          <p class="project-kind">{{ project.kind }}</p>
-          <p class="project-about">{{ project.about }}</p>
-        </li>
-        {%- endfor %}
-      </ul>
-    </section>
+      <section id="projects" aria-labelledby="projects-heading">
+        <h2 id="projects-heading">Projects</h2>
+        <ul class="projects">
+          {%- for project in projects %}
+          <li class="project">
+            <h3 class="project-name"><a href="{{ project.url }}">{{ project.name }}</a></h3>
+            <p class="project-kind">{{ project.kind }}</p>
+            <p class="project-about">{{ project.about }}</p>
+          </li>
+          {%- endfor %}
+        </ul>
+      </section>
 
-    <section id="writings" aria-labelledby="writings-heading">
-      <h2 id="writings-heading">{{ site.writingsTitle }}</h2>
-      <ul class="writings">
-        {%- for post in collections.writingsNewestFirst %}
-        <li>
-          <time datetime="{{ post.date | isoDate }}">{{ post.date | year }}</time>
-          <a href="{{ post.url }}">{{ post.data.title }}</a>
-        </li>
-        {%- endfor %}
-      </ul>
-    </section>
+      <section id="writings" aria-labelledby="writings-heading">
+        <h2 id="writings-heading">{{ site.writingsTitle }}</h2>
+        <ul class="writings">
+          {%- for post in collections.writingsNewestFirst %}
+          <li>
+            <time datetime="{{ post.date | isoDate }}">{{ post.date | year }}</time>
+            <a href="{{ post.url }}">{{ post.data.title }}</a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </section>
 
-    <section id="publications" aria-labelledby="publications-heading">
-      <h2 id="publications-heading">Publications</h2>
-      <ul class="publications">
-        {%- for paper in publications %}
-        <li>
-          <p class="paper-title">{{ paper.title }}</p>
-          <p class="paper-citation">{{ paper.authors }}. {{ paper.year }}. <cite>{{ paper.source }}</cite>.</p>
-        </li>
-        {%- endfor %}
-      </ul>
-    </section>
+      <section id="publications" aria-labelledby="publications-heading">
+        <h2 id="publications-heading">Publications</h2>
+        <ul class="publications">
+          {%- for paper in publications %}
+          <li>
+            <p class="paper-title">{{ paper.title }}</p>
+            <p class="paper-citation">{{ paper.authors }}. {{ paper.year }}. <cite>{{ paper.source }}</cite>.</p>
+          </li>
+          {%- endfor %}
+        </ul>
+      </section>
 
+    </main>
     {% include "colophon.njk" %}
-  </main>
+  </div>
 </div>
 <script src="/js/sections.js" defer></script>

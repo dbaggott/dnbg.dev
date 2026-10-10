@@ -25,8 +25,8 @@
   --code-bg: rgb(20 17 16 / 0.62);
 
   /* How much of the page colour lies over the photo: --wash-top over the sky
-     at the top of the screen, --wash-bottom over the treeline. Set so text
-     clears 4.5:1 against the brightest clouds behind it. */
+     at the top of the screen, --wash-bottom over the treeline. Set so body
+     and muted text clear 4.5:1 against the brightest clouds behind them. */
   --wash-top: 79%;
   --wash-bottom: 68%;
 
@@ -204,6 +204,7 @@ h3 {
     position: sticky;
     top: 0;
     height: 100vh;
+    overflow-y: auto;
   }
 
   .panel-inner {
@@ -234,8 +235,14 @@ h3 {
 
 
   .content {
+    max-width: calc(var(--measure) + 8rem);
     margin: 0;
     padding: 5rem 4rem 0;
+  }
+
+  /* Set by js/sections.js, which owns the reading band. */
+  section[id] {
+    scroll-margin-top: var(--band-top, 0);
   }
 }
 
@@ -243,8 +250,6 @@ section[id] {
   margin-top: 3.5rem;
   padding-top: 3rem;
   border-top: 1px solid var(--rule);
-  /* Set by js/sections.js, which owns the reading band. */
-  scroll-margin-top: var(--band-top, 0);
 }
 
 section[id] > h2 {
@@ -323,6 +328,8 @@ section[id] > h2 {
   font-style: italic;
 }
 
+/* Outside the main content, so it is the page's footer for assistive tech; on
+   posts it sits under the page column. */
 .colophon {
   margin-top: 3rem;
   padding-bottom: 3rem;
@@ -337,6 +344,12 @@ section[id] > h2 {
 }
 
 /* Posts and the 404 page. */
+
+body > .colophon {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
 
 .page {
   max-width: calc(var(--measure) + 2 * var(--gutter));

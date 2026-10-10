@@ -1,32 +1,39 @@
-// Gives each section link in the panel --share: how much of a reading band,
-// a strip across the screen a little above its middle, its section holds. A
-// section taller than the band holds all of it while the band is inside it,
-// so even a short section has a moment as the only large link; crossing into
-// the next, the share moves across in proportion. The CSS sizes the links by it.
+// On a wide screen, gives each section link in the panel --share: how much of
+// a reading band, a strip across the screen a little above its middle, its
+// section holds. A section taller than the band holds all of it while the band
+// is inside it, so even a short section has a moment as the only large link;
+// crossing into the next, the share moves across in proportion. The CSS sizes
+// the links by it. Narrower screens hide the links, so this does nothing there.
 
 const BAND_HEIGHT_REM = 12;
 const BAND_CENTRE = 0.4; // of the screen's height, from the top
 
-// A link to a section lands with the section's top at the top of the band,
-// so the section you chose is the one the band is in.
-document.documentElement.style.setProperty(
-  "--band-top",
-  `calc(${BAND_CENTRE * 100}vh - ${BAND_HEIGHT_REM / 2}rem)`,
-);
-
+const root = document.documentElement;
+const wide = matchMedia("(min-width: 64rem)");
 const links = [...document.querySelectorAll(".sections a")];
 const sections = links.map((link) => document.querySelector(link.hash));
+let band;
+
+// --band-top is where a link to a section lands its top (scroll-margin-top in
+// the CSS), so the section you chose is the one the band is in.
+function measureBand() {
+  const rem = parseFloat(getComputedStyle(root).fontSize);
+  const centre = window.innerHeight * BAND_CENTRE;
+  const half = (BAND_HEIGHT_REM * rem) / 2;
+  band = { top: centre - half, bottom: centre + half };
+  root.style.setProperty("--band-top", `${band.top}px`);
+}
 
 function update() {
-  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-  const centre = window.innerHeight * BAND_CENTRE;
-  const bandTop = centre - (BAND_HEIGHT_REM * rem) / 2;
-  const bandBottom = centre + (BAND_HEIGHT_REM * rem) / 2;
-
-  const held = sections.map((section) => {
+  let held = sections.map((section) => {
     const { top, bottom } = section.getBoundingClientRect();
-    return Math.max(0, Math.min(bottom, bandBottom) - Math.max(top, bandTop));
+    return Math.max(0, Math.min(bottom, band.bottom) - Math.max(top, band.top));
   });
+  // The last section can be too short to scroll up into the band; at the
+  // bottom of the page, it is where you are.
+  if (window.innerHeight + window.scrollY >= root.scrollHeight - 1) {
+    held = held.map((_, i) => (i === held.length - 1 ? 1 : 0));
+  }
   const total = held.reduce((sum, height) => sum + height, 0);
   links.forEach((link, i) => {
     link.style.setProperty("--share", total ? (held[i] / total).toFixed(3) : "0");
@@ -43,6 +50,23 @@ function schedule() {
   });
 }
 
-addEventListener("scroll", schedule, { passive: true });
-addEventListener("resize", schedule);
-update();
+function onResize() {
+  measureBand();
+  schedule();
+}
+
+function apply() {
+  if (wide.matches) {
+    measureBand();
+    update();
+    addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", onResize);
+  } else {
+    removeEventListener("scroll", schedule);
+    removeEventListener("resize", onResize);
+    root.style.removeProperty("--band-top");
+  }
+}
+
+wide.addEventListener("change", apply);
+apply();
