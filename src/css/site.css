@@ -20,10 +20,10 @@
   --page: #efeeeb;
   --ink: #2a2321;
   --muted: #6b625a;
-  --rule: #d6d0c8;
+  --rule: rgb(42 35 33 / 0.16);
   --accent: #a4532c;
   --code-bg: #e5e2dd;
-  --veil: rgb(36 30 28 / 0.58);
+  --wash: 85%;
 
   --text: "Source Serif 4", Georgia, "Times New Roman", serif;
 
@@ -38,7 +38,7 @@
     --page: #1e1a18;
     --ink: #ece7e2;
     --muted: #a89d93;
-    --rule: #3a332e;
+    --rule: rgb(236 231 226 / 0.16);
     --accent: #e3875a;
     --code-bg: #2a2421;
 
@@ -55,6 +55,33 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/* The woods behind every page, washed out toward the page colour so text
+   reads over it; in dark mode, washed toward the dark page instead. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--page) var(--wash), transparent),
+      color-mix(in srgb, var(--page) var(--wash), transparent)
+    ),
+    url(/images/woods-1280.jpg) 50% 40% / cover no-repeat,
+    var(--page);
+}
+
+@media (min-width: 64rem) {
+  body::before {
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--page) var(--wash), transparent),
+        color-mix(in srgb, var(--page) var(--wash), transparent)
+      ),
+      url(/images/woods-2400.jpg);
+  }
 }
 
 body {
@@ -101,40 +128,8 @@ h3 {
    the content. Side by side on a wide screen, where the panel stays put while
    the content scrolls; stacked on a narrow one. */
 
-/* The photo, under a veil dark enough for white text, sits behind the panel's
-   content and dissolves into the page at the edge it shares with the rest.
-   The dissolve is the photo's own transparency on an eased curve; a solid
-   page-coloured overlay instead shows bands where its gradient bends. */
 .panel {
-  position: relative;
-  isolation: isolate;
-  color: #fff;
-  --fade: to bottom;
-  --fade-length: 4rem;
-}
-
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(var(--veil), var(--veil)),
-    url(/images/tree-750.jpg) 50% 55% / cover no-repeat,
-    #4b3d36;
-  /* Smoothstep, sampled: opaque, easing out to transparent over --fade-length. */
-  mask-image: linear-gradient(
-    var(--fade),
-    #000 calc(100% - var(--fade-length)),
-    rgb(0 0 0 / 0.957) calc(100% - var(--fade-length) * 0.875),
-    rgb(0 0 0 / 0.844) calc(100% - var(--fade-length) * 0.75),
-    rgb(0 0 0 / 0.703) calc(100% - var(--fade-length) * 0.625),
-    rgb(0 0 0 / 0.5) calc(100% - var(--fade-length) * 0.5),
-    rgb(0 0 0 / 0.297) calc(100% - var(--fade-length) * 0.375),
-    rgb(0 0 0 / 0.156) calc(100% - var(--fade-length) * 0.25),
-    rgb(0 0 0 / 0.043) calc(100% - var(--fade-length) * 0.125),
-    transparent
-  );
+  color: var(--ink);
 }
 
 .panel-inner {
@@ -150,7 +145,7 @@ h3 {
 .tagline {
   margin: 0.5rem 0 0;
   font-size: 1.125rem;
-  color: rgb(255 255 255 / 0.88);
+  color: var(--muted);
 }
 
 .panel a {
@@ -159,7 +154,7 @@ h3 {
 }
 
 .panel a:hover {
-  color: #fff;
+  color: var(--ink);
 }
 
 .sections {
@@ -183,11 +178,7 @@ h3 {
   display: block;
   padding: 0.25rem;
   margin: -0.25rem;
-  opacity: 0.85;
-}
-
-.elsewhere a:hover {
-  opacity: 1;
+  color: var(--muted);
 }
 
 .icon {
@@ -218,15 +209,6 @@ h3 {
     position: sticky;
     top: 0;
     height: 100vh;
-    --fade: to right;
-    --fade-length: 14rem;
-  }
-
-  .panel::before {
-    background:
-      linear-gradient(var(--veil), var(--veil)),
-      url(/images/tree-1200.jpg) 50% 50% / cover no-repeat,
-      #4b3d36;
   }
 
   .panel-inner {
@@ -251,7 +233,7 @@ h3 {
   .sections a {
     display: inline-block;
     font-size: calc(1.25rem + var(--share, 0) * 0.75rem);
-    color: rgb(255 255 255 / calc(0.72 + var(--share, 0) * 0.28));
+    color: color-mix(in srgb, var(--ink) calc(68% + var(--share, 0) * 32%), transparent);
     transition: font-size 0.12s ease-out;
   }
 
