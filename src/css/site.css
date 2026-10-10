@@ -14,8 +14,8 @@
   src: url(/fonts/source-serif-4-italic.woff2) format("woff2-variations");
 }
 
-/* One dark design: light text over a dimmed, blurred sky and treeline. The
-   rust of bark in light is the one accent. */
+/* One dark design: light text over a dimmed, blurred sky and treeline, with a
+   warm rust as the one accent. */
 :root {
   --page: #1e1a18;
   --ink: #ece7e2;
@@ -115,8 +115,7 @@ h3 {
   margin: 0;
 }
 
-/* Home: a panel with the name and the way around, over the cove photo, beside
-   the content. Side by side on a wide screen, where the panel stays put while
+/* Home: a panel with the name and the way around, beside the content. Side by side on a wide screen, where the panel stays put while
    the content scrolls; stacked on a narrow one. */
 
 .panel {
@@ -299,11 +298,6 @@ section[id] > h2 {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   padding-top: 0.1em;
-}
-
-.feed {
-  margin-top: 1rem;
-  font-size: 0.9375rem;
 }
 
 .publications li {
